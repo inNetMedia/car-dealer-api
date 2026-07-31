@@ -19,7 +19,8 @@ app.use(express.json())
 
 uploadImages()
 
-app.use('/admin', require('./routes/api'))
+app.use('/', require('./routes/api'))
+app.use('/admin', require('./routes/adminRoutes'))
 app.use('/user', require('./routes/userRoutes'))
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}...`))

@@ -14,9 +14,5 @@ router.route('/wishlist')
     .get(usersController.getWishList)
     .post(usersController.saveToWish);
 
-router.route('/').get(usersController.getAllUsers) //Admin route
-
-router.route('/createAdmin').post(usersController.createAdmin)
-
 
 module.exports = router
