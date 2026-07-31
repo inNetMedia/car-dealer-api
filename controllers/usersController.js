@@ -10,6 +10,10 @@ const registerUser = asyncHandler( async(req, res) => {
     const { email, username, password } = req.body
     if(!req?.body?.email || !req?.body?.username || !req?.body?.password) return res.status(400).json({ message: 'All fields are required to register user'});
 
+    //Check for duplicate user
+    const foundUser = await User.findOne({ email: req.body.email })
+    if(foundUser) return res.status(209).json({ message: `User already exists` });
+
     const hashedPwd = await bcrypt.hash(password, 10)
     const activationStr = uuid()
 
