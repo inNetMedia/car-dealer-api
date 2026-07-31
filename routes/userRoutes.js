@@ -8,7 +8,11 @@ const express = require('express'),
 router.route('/register').post(usersController.registerUser)
 router.route('/auth').post(authUser)
 
-router.route('/activate/:id').get(usersController.activateAccount)
+router.route('/activate/:actStr').get(usersController.activateAccount)
+
+router.route('/wishlist')
+    .get(usersController.getWishList)
+    .post(usersController.saveToWish);
 
 router.route('/').get(usersController.getAllUsers) //Admin route
 

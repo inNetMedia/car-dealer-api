@@ -14,10 +14,11 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    wishList: { type: Array },
+    wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Car' }],
     refreshToken: { type: String },
     active: { type: Boolean, default: false },
     role: { type: String },
+    activationStr: { type: String },
     joined: { type: Date, default: Date.now() }
 })
 

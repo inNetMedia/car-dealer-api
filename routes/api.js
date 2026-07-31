@@ -8,9 +8,9 @@ const carController = require('../controllers/carController'),
 
 
 router.route('/api/car')
-    .post(verifyJWT, verifyRoles(rolesList.admin), carController.uploadNewCar)   //Admin Route     
+    .post(carController.uploadNewCar)   //Admin Route     
     .delete(carController.deleteCar)    //Admin Route
-    .get(verifyJWT, verifyRoles(rolesList.admin), carController.getAllCars);     
+    .get(carController.getAllCars);     
 
 router.route('/api/car/filter').get(carController.filterResults)
 router.route('/api/car/sold').get(carController.getAllSoldCars)     //Admin Route

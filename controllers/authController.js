@@ -14,6 +14,9 @@ const authUser = asyncHandler( async(req, res) => {
     const correctPwd = await bcrypt.compare(password, foundUser.password)
     if(!correctPwd) return res.sendStatus(401);
 
+    //Check if the user account is activated
+    if(!foundUser.active) return res.status(400).json({ message: `Please activate your account via email to continue` })
+
     //Create JWTs
     //const roles = Object.values(foundUser.roles)
     const  accessToken = jwt.sign(
