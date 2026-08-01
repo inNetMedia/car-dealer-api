@@ -19,45 +19,45 @@ const uploadNewCar = asyncHandler( async(req, res) => {
         mileage: req.body.mileage,
         category: req.body.category,
         specs:{
-            transmission: req.body.specs.transmission,
+            transmission: req.body.transmission,
             engine: {
-                maxPower: req.body.specs.engine.maxPower,
-                acceleration: req.body.specs.engine.acceleration,
-                size: req.body.specs.engine.size,
-                position: req.body.specs.engine.position,
-                emmisions: req.body.specs.emmisions,
-                capacity: req.body.specs.engine.capacity,
-                cylinderLayout: req.body.specs.engine.cylinderLayout,
-                fuelType: req.body.specs.engine.fuelType,
-                fuelCapacity: req.body.specs.engine.fuelCapacity,
-                fuelConsuption: req.body.specs.engine.fuelConsuption,
-                range: req.body.specs.engine.range,
-                torque: req.body.specs.engine.torque
+                maxPower: req.body.maxPower,
+                acceleration: req.body.acceleration,
+                size: req.body.size,
+                position: req.body.position,
+                emmisions: req.body.emmisions,
+                capacity: req.body.capacity,
+                cylinderLayout: req.body.cylinderLayout,
+                fuelType: req.body.fuelType,
+                fuelCapacity: req.body.fuelCapacity,
+                fuelConsumption: req.body.fuelConsumption,
+                range: req.body.range,
+                torque: req.body.torque
             },
             handling: {
-                powerSteering: req.body.specs.handling.powerSteering,
-                tractionCtrl: req.body.specs.handling.tractionCtrl,
-                driveTrain: req.body.specs.handling.driveTrain
+                powerSteering: req.body.powerSteering,
+                tractionCtrl: req.body.tractionCtrl,
+                driveTrain: req.body.driveTrain
             },
             comfort: {
-                AC: req.body.specs.comfort.AC,
-                electricWindows: req.body.specs.comfort.electricWindows,
-                seats: req.body.specs.comfort.seats,
-                doors: req.body.specs.comfort.doors
+                AC: req.body.AC,
+                electricWindows: req.body.electricWindows,
+                seats: req.body.seats,
+                doors: req.body.doors
             },
             tech: {
-                steeringWheelCtrl: req.body.specs.tech.steeringWheelCtrl,
-                onboardPC: req.body.specs.tech.onboardPC,
-                bluetooth: req.body.specs.tech.bluetooth,
-                USBport: req.body.specs.tech.USBport
+                steeringWheelCtrl: req.body.steeringWheelCtrl,
+                onboardPC: req.body.onboardPC,
+                bluetooth: req.body.bluetooth,
+                USBport: req.body.USBport
             },
             safety: {
-                airbagQty: req.body.specs.safety.airbagQty,
-                ISOFIX: req.body.specs.safety.ISOFIX,
-                ABS: req.body.specs.safety.ABS,
-                cruiseCtrl: req.body.specs.safety.cruiseCtrl,
-                remoteCentralLocking: req.body.specs.safety.remoteCentralLocking,
-                lampTech: req.body.specs.safety.lampTech
+                airbagQty: req.body.airbagQty,
+                ISOFIX: req.body.ISOFIX,
+                ABS: req.body.ABS,
+                cruiseCtrl: req.body.cruiseCtrl,
+                remoteCentralLocking: req.body.remoteCentralLocking,
+                lampTech: req.body.lampTech
             }
         }
     })
@@ -85,7 +85,7 @@ const uploadImages = asyncHandler( async(req, res) => {
       uploadedUrls.push(result.secure_url);
     }
 
-    res.status(200).json({ "images": uploadedUrls })
+    return res.status(200).json({ "images": uploadedUrls })
 })
 
 const deleteCar = asyncHandler( async(req, res) => {
@@ -128,7 +128,7 @@ const getCar = asyncHandler( async(req, res) => {
 
 
 const getAllCars = asyncHandler( async(req, res) => {
-    const cars = await Car.find()
+    const cars = await Car.find({ sold: false })
     if(!cars) return res.status(204).json({ message: `There are currently no car listings`});
 
     return res.status(200).json(cars)

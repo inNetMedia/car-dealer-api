@@ -17,10 +17,9 @@ app.use(cors({
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
-uploadImages()
-
 app.use('/', require('./routes/api'))
 app.use('/admin', require('./routes/adminRoutes'))
 app.use('/user', require('./routes/userRoutes'))
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}...`))

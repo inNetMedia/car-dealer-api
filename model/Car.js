@@ -39,6 +39,8 @@ const CarSchema = new Schema({
         type: Number,
         required: true
     },
+    featured: { type: Boolean, default: false },
+    latest: { type: Boolean, default: false },
     description: {
         type: String,
         required: true
@@ -66,7 +68,7 @@ const CarSchema = new Schema({
                 type: Number,
                 required: true
             },
-            fuelConsuption: {
+            fuelConsumption: {
                 type: Number,
                 required: true
             },
@@ -94,7 +96,8 @@ const CarSchema = new Schema({
             steeringWheelCtrl: Boolean,
             onboardPC: Boolean,
             bluetooth: Boolean,
-            USBport: Boolean
+            USBport: Boolean,
+            infotainment: Boolean
         },
         safety:{
             airbagQty: Number,

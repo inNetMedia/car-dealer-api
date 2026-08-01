@@ -4,7 +4,8 @@ const carController = require('../controllers/carController'),
     router = express.Router(),
     rolesList = require('../config/rolesList'),
     verifyJWT = require('../middlewares/verifyJWT'),
-    verifyRoles = require('../middlewares/verifyRoles');
+    verifyRoles = require('../middlewares/verifyRoles'),
+    usersController = require('../controllers/usersController');
 
 
 router.route('/api/car/:id/mark-sold').put(carController.setCarSold)     //Admin Route
