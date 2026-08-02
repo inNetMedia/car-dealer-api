@@ -8,20 +8,21 @@ const carController = require('../controllers/carController'),
     usersController = require('../controllers/usersController');
 
 
-router.route('/api/car/:id/mark-sold').put(carController.setCarSold)     //Admin Route
-router.route('/api/car/:id/update').put(carController.updateCar)       //Admin Route
+router.route('/api/car/:id/mark-sold').put(verifyJWT, verifyRoles(rolesList.admin), carController.setCarSold)     //Admin Route
+router.route('/api/car/:id/update').put(verifyJWT, verifyRoles(rolesList.admin), carController.updateCar)       //Admin Route
 
 router.route('/api/car')
-    .post(carController.uploadNewCar)   //Admin Route     
-    .delete(carController.deleteCar);    //Admin Route
+    .post(verifyJWT, verifyRoles(rolesList.admin), carController.uploadNewCar)   //Admin Route     
+    .delete(verifyJWT, verifyRoles(rolesList.admin), carController.deleteCar)
+    .get(verifyJWT, verifyRoles(rolesList.admin), carController.getAllCars)    //Admin Route
 
-router.route('/api/car/sold').get(carController.getAllSoldCars)     //Admin Route
+router.route('/api/car/sold').get(verifyJWT, verifyRoles(rolesList.admin), carController.getAllSoldCars)     //Admin Route
 
-router.route('/api/upload').post(upload.array('images', 15), carController.uploadImages) //Admin Route
+router.route('/api/upload').post(verifyJWT, verifyRoles(rolesList.admin), upload.array('images', 15), carController.uploadImages) //Admin Route
 
-router.route('/users').get(usersController.getAllUsers) //Admin route
+router.route('/users').get(verifyJWT, verifyRoles(rolesList.admin), usersController.getAllUsers) //Admin route
 
-router.route('/createAdmin').post(usersController.createAdmin)
+//router.route('/createAdmin').post(usersController.createAdmin)
 
 
 module.exports = router

@@ -4,10 +4,14 @@ const express = require('express'),
     PORT = 3500 || process.env.PORT,
     app = express(),
     connectDB = require('./config/dbConnect'),
-    uploadImages = require('./services/cloudinaryService');
+    uploadImages = require('./services/cloudinaryService'),
+    cookieParser = require('cookie-parser');
+    
 
 
 connectDB()
+
+app.use(cookieParser())
 
 app.use(cors({
     origin: 'http://localhost:5173', 

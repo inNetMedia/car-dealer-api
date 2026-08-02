@@ -107,5 +107,5 @@ module.exports = {
     activateAccount,
     createAdmin,
     saveToWish,
-    getWishList
+    getWishList,
 }

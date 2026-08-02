@@ -39,8 +39,8 @@ const authUser = asyncHandler( async(req, res) => {
     //Send the refreshToken to the user who logged in inside the db
     foundUser.refreshToken = refreshToken
     await foundUser.save()
-    res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'None', secure:true});
-    res.status(200).json({ accessToken })
+    res.cookie('token', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'lax', secure: process.env.NODE_ENV === 'production'}); //Set to secure:true on production
+    res.status(200).json({ id: foundUser._id, role: foundUser.role })
 })
 
 

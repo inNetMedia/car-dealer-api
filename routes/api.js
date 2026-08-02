@@ -6,13 +6,13 @@ const carController = require('../controllers/carController'),
     verifyJWT = require('../middlewares/verifyJWT'),
     verifyRoles = require('../middlewares/verifyRoles');
 
+router.route('/api/car/:id').get(carController.getCar)
 
-router.route('/api/car').get(carController.getAllCars);     
+router.route('/api/car').get(carController.getAllCars);
 
 router.route('/api/car/filter').get(carController.filterResults)
 
 
-router.route('/api/car/:id').get(carController.getCar)
 
 
 

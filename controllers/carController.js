@@ -128,8 +128,8 @@ const getCar = asyncHandler( async(req, res) => {
 
 
 const getAllCars = asyncHandler( async(req, res) => {
-    const cars = await Car.find({ sold: false })
-    if(!cars) return res.status(204).json({ message: `There are currently no car listings`});
+    const cars = await Car.find({ sold: false }).sort({ listingDate: -1 })
+    if(!cars || cars.length === 0) return res.status(204).json({ message: `There are currently no car listings`});
 
     return res.status(200).json(cars)
 })
