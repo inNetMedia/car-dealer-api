@@ -24,8 +24,10 @@ const registerUser = asyncHandler( async(req, res) => {
         activationStr,
         role: "user"
     })
+    const actLink = `http://localhost:3500/user/activate/${newUser.activationStr}`
+    const msg = `<h1>Hi ${req.body.username}, follow the link to activate your account</h1><br><a>${actLink}</a>`
 
-    sendEmail(req.body.email, `http://localhost:3500/user/activate/${newUser.activationStr}`)         ///Change the address in production
+    sendEmail(`sammyphala99@gmail.com`, msg,`Activate your account` )        ///Change the address in production
 
     console.log(newUser)
     return res.status(200).json({ message: 'Follow the link sent on your email to activate account'})
@@ -102,10 +104,42 @@ const createAdmin = asyncHandler( async(req, res) => {
 
 
 const logoutUser = asyncHandler( async(req, res) => {
-    if(!req?.cookies?.token) return res.status(204);
+    if(!req?.cookies?.token) return res.status(200);
 
     const token = req.cookies.token
-    res.cookie('token', accessToken, { httpOnly: true, maxAge: 0, sameSite: 'lax', secure: process.env.NODE_ENV === 'production'});
+    console.log(`token is ${token}`)
+    res.clearCookie('token', { httpOnly: true, maxAge: 0, sameSite: 'lax', secure: process.env.NODE_ENV === 'production'});
+    return res.status(200).json({ message: 'Logged out successfully'})
+})
+
+const receiveOffer = asyncHandler( async(req, res) => {
+    if(!req?.body) return res.status(400).json({ message: `Body Content required`});
+
+    const foundUser = await User.findOne({ _id: req.body.id })
+    if(!foundUser) return res.status(400).json({ message: 'Create an account to send offer'});
+
+    //Check if the emails match
+    if(req.body.email !== foundUser.email) return res.status(409).json({ message: 'User emails do not match'});
+    const valuation = 'Asking for valuation'
+
+    const msg = `
+            <p>Seller names: ${foundUser.username}</p>
+            <h1>Car Details</h1>
+            <p>Make: ${req.body.make}</p>
+            <p>Model: ${req.body.model}</p>
+            <p>Condition: ${req.body.condition}</p>
+            <p>Asking Price(R): ${req.body.price || valuation}</p>
+            <p>Year: ${req.body.year}</p>
+            <p>Phone: ${req.body.phone}</p>
+            <p>Transmission: ${req.body.transmission}</p>
+            <p>Color: ${req.body.color}</p>
+            <h1>Details</h1>
+            <p>${req.body.details}</p>
+    `
+
+    sendEmail(`sammyphala99@gmail.com`, msg, `Car Offer`)
+
+    res.status(201).json({ message: `Offer submitted!`})
 })
 
 
@@ -116,5 +150,6 @@ module.exports = {
     createAdmin,
     saveToWish,
     getWishList,
-    logoutUser
+    logoutUser,
+    receiveOffer
 }

@@ -16,4 +16,6 @@ router.route('/wishlist/:id').get(verifyJWT, usersController.getWishList)
 
 router.route('/logout').get(usersController.logoutUser)
 
+router.route('/sell').post(verifyJWT, usersController.receiveOffer)
+
 module.exports = router
