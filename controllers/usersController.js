@@ -13,7 +13,7 @@ const registerUser = asyncHandler( async(req, res) => {
     //Check for duplicate user
     const foundUser = await User.findOne({ email: req.body.email })
     if(foundUser) return res.status(209).json({ message: `User already exists` });
-
+    console.log(req.body.password)
     const hashedPwd = await bcrypt.hash(password, 10)
     const activationStr = uuid()
 
@@ -73,10 +73,10 @@ const saveToWish = asyncHandler( async(req, res) => {
 
 
 const getWishList = asyncHandler( async(req, res) => {
-    const { id } = req.body
-    if(!req?.body?.id) return res.status(400).json({ message: `Id required to get wish list`});
+    const { id } = req.params.id
+    if(!req?.params?.id) return res.status(400).json({ message: `Id required to get wish list`});
 
-    const foundUser = await User.findOne({ _id: req.body.id }).populate('wishList')
+    const foundUser = await User.findOne({ _id: req.params.id }).populate('wishList')
     if(!foundUser) return res.status(400).json({ message: `User not found` });
     
     if(!foundUser.wishList.length) return res.status(200).json({ message: "You currently don't have anything in your wish list"})
@@ -101,6 +101,14 @@ const createAdmin = asyncHandler( async(req, res) => {
 })
 
 
+const logoutUser = asyncHandler( async(req, res) => {
+    if(!req?.cookies?.token) return res.status(204);
+
+    const token = req.cookies.token
+    res.cookie('token', accessToken, { httpOnly: true, maxAge: 0, sameSite: 'lax', secure: process.env.NODE_ENV === 'production'});
+})
+
+
 module.exports = {
     registerUser,
     getAllUsers,
@@ -108,4 +116,5 @@ module.exports = {
     createAdmin,
     saveToWish,
     getWishList,
+    logoutUser
 }
