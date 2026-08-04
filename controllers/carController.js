@@ -161,30 +161,69 @@ const setCarSold = asyncHandler( async(req, res) => {
 
 
 const filterResults = asyncHandler(async( req, res) => {
-    const categories = ['suv', 'sedan', 'hatchback', 'crossover', 'bike', 'sports']
-    const filter = req.query.q
+    const categories = ['SUV', 'Sedan', 'Hatchback', 'Crossover', 'Bike', 'Sports', 'Luxury', 'all']
+    let filter = req.query.q
 
     if(categories.includes(filter)){
-        const carList = await Car.find({ category: filter })
+        if(filter === 'all'){
+            const carList = await Car.find({ sold: false })
+            if(!carList) return res.status(204).json({ message: `No car listing`});
+            return res.status(200).json(carList)
+        }
+
+        const carList = await Car.find({ category: filter, sold: false })
         if(!carList) return res.status(204).json({ message: `No car listing of category ${filter}`});
         return res.status(200).json(carList)
     }
 
-    if(filter == 'price'){
-        const carList = await Car.find().sort('-price')
-        if(!carList) return res.status(204).json({ message: `No car listing of category ${filter}`});
-        return res.status(200).json(carList)
+    if(filter.startsWith('d')){
+        let fltrArr = filter.split('')
+        fltrArr[0] = '-'
+        filter = "".concat(...fltrArr)
+        console.log(filter)
     }
+    
+    const carList = await Car.find({ sold: false }).sort(filter)
+    if(!carList) return res.status(204).json({ message: `No car listing of category ${filter}`});
+    return res.status(200).json(carList)
 
-    if(filter == 'date'){
-        const carList = await Car.find().sort('-date')
-        if(!carList) return res.status(204).json({ message: `No car listing of category ${filter}`});
-        return res.status(200).json(carList)
-    }
+  
 
-    res.status(400).json({ warning: `Wrong filter query`})
+    //res.status(400).json({ warning: `Wrong filter query`})
 })
 
+
+const searchCars = asyncHandler( async(req, res) => {
+    const search = req.query.q
+    if(!search.length) return res.json([])
+
+    // 1. Base condition: EXCLUDE sold cars unconditionally
+    let query = { sold: { $ne: true } }; // handles both sold: false and undefined
+
+    // 2. If a search term exists, append the $or conditions
+    if (search && search.trim() !== '') {
+      const term = search.trim();
+      const regex = new RegExp(term, 'i'); // 'i' = case-insensitive partial match
+
+      const searchConditions = [
+        { brand: regex },        // e.g. "Volkswagen", "Mercedes"
+        { model: regex },        // e.g. "Polo", "C-Class"
+        { category: regex },     // e.g. "Hatchback", "SUV"
+        { variant: regex },      // e.g. "1.0TSI", "AMG Line" (if you have this field)
+      ];
+
+      // Optional: If the user typed a number (like "2024"), match the numeric year too
+      if (!isNaN(term)) {
+        searchConditions.push({ year: Number(term) });
+      }
+
+      // Attach the $or array to the query
+      query.$or = searchConditions;
+    }
+
+    const cars = await Car.find(query);
+    res.json(cars);
+})
 
 module.exports = {
     uploadNewCar,
@@ -195,7 +234,8 @@ module.exports = {
     updateCar,
     uploadImages,
     getAllCars,
-    filterResults
+    filterResults,
+    searchCars
 }
 
 

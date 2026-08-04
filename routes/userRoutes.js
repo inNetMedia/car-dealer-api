@@ -11,9 +11,9 @@ router.route('/auth').post(authUser)
 
 router.route('/activate/:actStr').get(usersController.activateAccount)
 
-router.route('/wishlist')
-    .get(verifyJWT, usersController.getWishList)
-    .post(verifyJWT, usersController.saveToWish);
+router.route('/wishlist').post(verifyJWT, usersController.saveToWish);
+router.route('/wishlist/:id').get(verifyJWT, usersController.getWishList)
 
+router.route('/logout').get(usersController.logoutUser)
 
 module.exports = router
