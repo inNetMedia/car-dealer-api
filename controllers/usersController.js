@@ -86,6 +86,20 @@ const getWishList = asyncHandler( async(req, res) => {
     return res.status(200).json(foundUser.wishList)
 })
 
+const removeWishList = asyncHandler( async(req, res) => {
+    const { userId, listingId } = req.body
+    if(!req?.body?.userId || !req?.body?.listingId) return res.status(400).json({ message:`All fields are required` });
+
+    const foundUser = await User.findOne({ _id: req.body.userId })
+    if(!foundUser) return res.status(400).json({ message: `User not found` });
+
+    const filteredArray = foundUser.wishList.filter((item) => item.toString() !== listingId)
+    const updatedList = await User.updateOne({ _id: req.body.userId }, { wishList: filteredArray })
+    console.log(updatedList)
+    console.log(filteredArray[0])
+    return res.status(200).json({ message:`Car listing removed from favourites` })
+})
+
 
 const createAdmin = asyncHandler( async(req, res) => {
     const pwd = await bcrypt.hash('0000',10)
@@ -151,5 +165,6 @@ module.exports = {
     saveToWish,
     getWishList,
     logoutUser,
-    receiveOffer
+    receiveOffer,
+    removeWishList
 }

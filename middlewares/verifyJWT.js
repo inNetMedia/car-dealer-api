@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const verifyJWT = (req, res, next) => {
     const token = req.cookies.token
     if (!token) {
-        console.log('No token provided')
         return res.status(401).json({ message: "Access Denied. No token provided." });
     }
 
@@ -17,7 +16,6 @@ const verifyJWT = (req, res, next) => {
             next()
         }   
     )
-    console.log('Token auth succesful')
 };
 
 module.exports = verifyJWT

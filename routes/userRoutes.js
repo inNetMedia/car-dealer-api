@@ -11,6 +11,7 @@ router.route('/auth').post(authUser)
 
 router.route('/activate/:actStr').get(usersController.activateAccount)
 
+router.route('/removewish').put(verifyJWT, usersController.removeWishList)
 router.route('/wishlist').post(verifyJWT, usersController.saveToWish);
 router.route('/wishlist/:id').get(verifyJWT, usersController.getWishList)
 
