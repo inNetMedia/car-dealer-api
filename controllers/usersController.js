@@ -3,7 +3,8 @@ const asyncHandler = require('express-async-handler'),
     User = require('../model/User'),
     Car = require('../model/Car'),
     sendEmail = require('../services/resendServices'),
-    { v4: uuid } = require('uuid');
+    { v4: uuid } = require('uuid'),
+    path = require('path')
 
 
 const registerUser = asyncHandler( async(req, res) => {
@@ -25,7 +26,13 @@ const registerUser = asyncHandler( async(req, res) => {
         role: "user"
     })
     const actLink = `http://localhost:3500/user/activate/${newUser.activationStr}`
-    const msg = `<h1>Hi ${req.body.username}, follow the link to activate your account</h1><br><a>${actLink}</a>`
+    const msg = `<h1>
+                    Hi ${req.body.username}, activate your account below
+                </h1><br>
+                <a href="${actLink}">
+                <button style="background-color:black; color:white; padding:1rem;">Activate</button>
+                </a>
+                `
 
     sendEmail(`sammyphala99@gmail.com`, msg,`Activate your account` )        ///Change the address in production
 
@@ -51,7 +58,7 @@ const activateAccount = asyncHandler( async(req, res) => {
     const updatedUser = await User.updateOne({ activationStr: req.params.actStr }, { active: true })
     console.log(updatedUser)
 
-    return res.status(200).json({ message: `${foundUser.username} your account has been activated`})
+    return res.status(200).sendFile(path.join(__dirname, '..', 'views', 'activation.html'))
 })
 
 const saveToWish = asyncHandler( async(req, res) => {

@@ -41,7 +41,7 @@ const authUser = asyncHandler( async(req, res) => {
     await foundUser.save()
     console.log('send cookies')
     res.cookie('token', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'lax', secure: process.env.NODE_ENV === 'production'}); //Set to secure:true on production
-    res.status(200).json({ id: foundUser._id, role: foundUser.role })
+    res.status(200).json({ id: foundUser._id, role: foundUser.role, username: foundUser.username, email: foundUser.email,  })
 })
 
 
