@@ -17,7 +17,7 @@ connectDB()
 app.use(cookieParser())
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://your-future-vercel-domain.vercel.app'], 
+    origin: ['http://localhost:5173', 'https://car-dealer-front-end.vercel.app/'], 
     credentials: true 
 }));
 

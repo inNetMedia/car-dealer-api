@@ -20,9 +20,9 @@ router.route('/api/car/sold').get(verifyJWT, verifyRoles(rolesList.admin), carCo
 
 router.route('/api/upload').post(verifyJWT, verifyRoles(rolesList.admin), upload.array('images', 15), carController.uploadImages) //Admin Route
 
-router.route('/users').get( usersController.getAllUsers) //Admin route
+router.route('/users').get(verifyJWT, verifyRoles(roles.admin), usersController.getAllUsers) //Admin route
 
-//router.route('/createAdmin').post(usersController.createAdmin)
+//router.route('/createAdmin').post(verifyJWT, verifyRoles(rolesList.admin), usersController.createAdmin)
 
 
 module.exports = router
