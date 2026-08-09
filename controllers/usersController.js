@@ -14,7 +14,6 @@ const registerUser = asyncHandler( async(req, res) => {
     //Check for duplicate user
     const foundUser = await User.findOne({ email: req.body.email })
     if(foundUser) return res.status(209).json({ message: `User already exists` });
-    console.log(req.body.password)
     const hashedPwd = await bcrypt.hash(password, 10)
     const activationStr = uuid()
 
@@ -34,7 +33,7 @@ const registerUser = asyncHandler( async(req, res) => {
                 </a>
                 `
 
-    sendEmail(`sammyphala99@gmail.com`, msg,`Activate your account` )        ///Change the address in production
+    sendEmail(req.body.email, msg,`Activate your account` )        ///Change the address in production
 
     console.log(newUser)
     return res.status(200).json({ message: 'Follow the link sent on your email to activate account'})
@@ -144,17 +143,17 @@ const receiveOffer = asyncHandler( async(req, res) => {
     const valuation = 'Asking for valuation'
 
     const msg = `
-            <p>Seller names: ${foundUser.username}</p>
-            <h1>Car Details</h1>
-            <p>Make: ${req.body.make}</p>
-            <p>Model: ${req.body.model}</p>
-            <p>Condition: ${req.body.condition}</p>
-            <p>Asking Price(R): ${req.body.price || valuation}</p>
-            <p>Year: ${req.body.year}</p>
-            <p>Phone: ${req.body.phone}</p>
-            <p>Transmission: ${req.body.transmission}</p>
-            <p>Color: ${req.body.color}</p>
-            <h1>Details</h1>
+            <h2>${foundUser.username} has a vehicle offer</h2>
+            <h2>Car Details</h2>
+            <p><b>Make:</b> ${req.body.make}</p>
+            <p><b>Model:</b> ${req.body.model}</p>
+            <p><b>Condition:</b> ${req.body.condition}</p>
+            <p><b>Asking Price(R):</b> ${req.body.price || valuation}</p>
+            <p><b>Year:</b> ${req.body.year}</p>
+            <p><b>Phone:</b> ${req.body.phone}</p>
+            <p><b>Transmission:</b> ${req.body.transmission}</p>
+            <p><b>Color:</b> ${req.body.color}</p>
+            <h2>More info</h2>
             <p>${req.body.details}</p>
     `
 
