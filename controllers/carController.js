@@ -163,7 +163,7 @@ const setCarSold = asyncHandler( async(req, res) => {
 
 
 const filterResults = asyncHandler(async( req, res) => {
-    const categories = ['SUV', 'Sedan', 'Hatchback', 'Crossover', 'Bike', 'Sports', 'Luxury', 'all']
+    const categories = ['SUV', 'Sedan', 'Hatchback', 'Crossover', 'Bike', 'Sports', 'Luxury', 'all', 'Bakkie']
     let filter = req.query.q
 
     if(categories.includes(filter)){
