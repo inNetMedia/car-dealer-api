@@ -18,6 +18,8 @@ const uploadNewCar = asyncHandler( async(req, res) => {
         brand: req.body.brand,
         mileage: req.body.mileage,
         category: req.body.category,
+        featured: req.body.featured,
+        latest: req.body.latest,
         specs:{
             transmission: req.body.transmission,
             engine: {
