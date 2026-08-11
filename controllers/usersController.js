@@ -24,7 +24,7 @@ const registerUser = asyncHandler( async(req, res) => {
         activationStr,
         role: "user"
     })
-    const actLink = `http://localhost:3500/user/activate/${newUser.activationStr}`
+    const actLink = `https://car-dealer-api-2ie4.onrender.com/user/activate/${newUser.activationStr}`
     const msg = `<h1>
                     Hi ${req.body.username}, activate your account below
                 </h1><br>
