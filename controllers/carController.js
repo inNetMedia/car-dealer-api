@@ -112,13 +112,12 @@ const updateCar = asyncHandler( async(req, res) => {
     const foundListing = await Car.findOne({ _id: id })
     if(!foundListing) return res.status(400).json({ message: `Listing with id ${req.params.id} not found`});
 
-    let featuresArr
-    if(req?.body?.features){
-        featuresArr = req.body.features.split(',')
-    }
+    const updatedObj = { ...req.body }
 
-    const updatedObj = {
-        ...req.body, features: featuresArr
+    if (req?.body?.features) {
+        updatedObj.features = Array.isArray(req.body.features)
+            ? req.body.features
+            : req.body.features.split(',')
     }
 
     const updatedListing = await Car.updateOne({ _id: req.params.id }, updatedObj)
