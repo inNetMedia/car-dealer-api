@@ -6,6 +6,8 @@ const Car = require('../model/Car');
 const uploadNewCar = asyncHandler( async(req, res) => {
     if(!req.body) return res.status(400).json({ message: `All fields are required` });
 
+    const featuresArr = req.body.features.split(',')
+
     //Save everything to the DB
     const uploadedCar = await Car.create({
         model: req.body.model,
@@ -14,7 +16,7 @@ const uploadNewCar = asyncHandler( async(req, res) => {
         year: req.body.year,
         price: req.body.price,
         description: req.body.description,
-        features: req.body.features,
+        features: featuresArr,
         brand: req.body.brand,
         mileage: req.body.mileage,
         category: req.body.category,
@@ -110,7 +112,16 @@ const updateCar = asyncHandler( async(req, res) => {
     const foundListing = await Car.findOne({ _id: id })
     if(!foundListing) return res.status(400).json({ message: `Listing with id ${req.params.id} not found`});
 
-    const updatedListing = await Car.updateOne({ _id: req.params.id }, req.body)
+    let featuresArr
+    if(req?.body?.features){
+        featuresArr = req.body.features.split(',')
+    }
+
+    const updatedObj = {
+        ...req.body, features: featuresArr
+    }
+
+    const updatedListing = await Car.updateOne({ _id: req.params.id }, updatedObj)
 
     console.log(updatedListing)
     return res.status(200).json({ message: `Listing ${req.params.id} updated!`})
