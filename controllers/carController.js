@@ -178,7 +178,7 @@ const filterResults = asyncHandler(async( req, res) => {
 
     if(categories.includes(filter)){
         if(filter === 'all'){
-            const carList = await Car.find({ sold: false })
+            const carList = await Car.find({ sold: false }).filter({ listingDate: 1 })
             if(!carList) return res.status(204).json({ message: `No car listing`});
             return res.status(200).json(carList)
         }
