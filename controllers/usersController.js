@@ -108,11 +108,17 @@ const removeWishList = asyncHandler( async(req, res) => {
 
 
 const createAdmin = asyncHandler( async(req, res) => {
-    const pwd = await bcrypt.hash('0000',10)
+    if(!req?.body?.username || !req?.body?.email || !req?.body?.password) return res.status(400).json({ message:`All fields are required` });
+
+    //Check for duplicate admin user
+    const duplicateUser = await User.findOne({ email: req.body.email })
+    if(duplicateUser) return res.status(400).json({ message: `User already exists` });
+
+    const pwd = await bcrypt.hash(req.body.password ,10)
 
     const newAdmin = await User.create({
-        username:'Nombasa',
-        email: 'nombasa@gmail.com',
+        username:req.body.username,
+        email: req.body.email,
         password: pwd,
         active: true,
         role: 199335

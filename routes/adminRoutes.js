@@ -22,7 +22,7 @@ router.route('/api/upload').post(verifyJWT, verifyRoles(rolesList.admin), upload
 
 router.route('/users').get(verifyJWT, verifyRoles(rolesList.admin), usersController.getAllUsers) //Admin route
 
-//router.route('/createAdmin').post(verifyJWT, verifyRoles(rolesList.admin), usersController.createAdmin)
+router.route('/createAdmin').post(verifyJWT, verifyRoles(rolesList.admin), usersController.createAdmin)
 
 
 module.exports = router
