@@ -128,6 +128,17 @@ const createAdmin = asyncHandler( async(req, res) => {
     return res.status(200).json({ message: `Admin created` })
 })
 
+const deleteUser = asyncHandler( async(req, res) => {
+    if(!req?.params?.id) return res.status(400).json({ message: `Id required to delete user` });
+    
+    const foundUser = await User.findOne({ _id: req.params.id });
+    if(!foundUser) return res.status(400).json({ message: `User not found` });
+
+    const deletedUser = await User.deleteOne({ id: req.params.id });
+
+    res.status(200).json({ message: `User ${foundUser.username} deleted` })
+})
+
 
 const logoutUser = asyncHandler( async(req, res) => {
     if(!req?.cookies?.token) return res.status(200);
@@ -178,5 +189,6 @@ module.exports = {
     getWishList,
     logoutUser,
     receiveOffer,
-    removeWishList
+    removeWishList,
+    deleteUser
 }
